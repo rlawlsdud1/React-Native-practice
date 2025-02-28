@@ -1,0 +1,50 @@
+import { Link, Stack } from "expo-router";
+import Foundation from "@expo/vector-icons/Foundation";
+import { colors } from "@/constants";
+
+const AuthLayout = () => {
+  return (
+    <Stack
+      screenOptions={{
+        headerTintColor: colors.BLACK,
+        contentStyle: {
+          backgroundColor: colors.WHITE,
+        },
+      }}
+    >
+      {/* 여기에 현재 경로의 index.tsx가 연결된다 */}
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "로그인",
+          headerShown: true,
+          headerLeft: () => (
+            <Link href={"/"} replace style={{ paddingRight: 5 }}>
+              {" "}
+              <Foundation name="home" color="black" size={28} />
+            </Link>
+          ),
+        }}
+      />
+
+      <Stack.Screen
+        name="login"
+        options={{
+          title: "이메일 로그인",
+          headerShown: true,
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+
+      <Stack.Screen
+        name="signup"
+        options={{
+          title: "회원가입",
+          headerShown: true,
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+    </Stack>
+  );
+};
+export default AuthLayout;
