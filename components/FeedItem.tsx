@@ -9,7 +9,7 @@ import { useDeletePost } from "@/hooks/queries/useDeletePost";
 import { router } from "expo-router";
 import ImagePreviweList from "./ImagePreviweList";
 import Vote from "./Vote";
-import { useLikePost } from "@/hooks/queries/useLikePost";
+import useLikePost from "@/hooks/queries/useLikePost";
 
 interface FeedItemProps {
   post: Post;
