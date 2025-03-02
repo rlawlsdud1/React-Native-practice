@@ -1,34 +1,46 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import FeedItem from "./FeedItem";
 import { colors } from "@/constants";
-
-const dummyData = Array.from({ length: 10 }, () => ({
-  id: 1,
-  userId: 1,
-  title: "더미 제목",
-  description:
-    "더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다 더미 내용입니다",
-  createdAt: "2025-01-01",
-  author: {
-    id: 1,
-    nickname: "닉네임",
-    imageUri: "",
-  },
-  imageUris: [],
-  likes: [],
-  hasVote: false,
-  voteCount: 1,
-  commentCount: 1,
-  viewCount: 1,
-})).map((v, i) => ({ ...v, id: i }));
+import useGetInfinitePosts from "@/hooks/queries/useGetInfinitePosts";
+import { useRef, useState } from "react";
+import { useScrollToTop } from "@react-navigation/native";
 
 const FeedList = () => {
+  const {
+    data: posts,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useGetInfinitePosts();
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const ref = useRef<FlatList | null>(null);
+  useScrollToTop(ref);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+  };
+
+  const handelEndReached = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
   return (
     <FlatList
-      data={dummyData}
+      ref={ref}
+      data={posts?.pages.flat()}
       renderItem={({ item }) => <FeedItem post={item} />}
       contentContainerStyle={styles.contentContainer}
+      onEndReached={handelEndReached}
       keyExtractor={(item) => String(item.id)}
+      onEndReachedThreshold={0.5}
+      refreshing={isRefreshing}
+      onRefresh={handleRefresh}
     />
   );
 };

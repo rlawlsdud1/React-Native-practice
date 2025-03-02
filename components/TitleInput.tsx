@@ -1,32 +1,26 @@
 import { Controller, useFormContext } from "react-hook-form";
 import InputField from "./InputField";
 
-const EmailInput = () => {
+const TitleInput = () => {
   const { control, setFocus } = useFormContext();
 
   return (
     <Controller
-      name="email"
+      name="title"
       control={control}
       rules={{
         validate: (data: string) => {
-          if (!data.length) return "이메일을 입력해주세요";
-
-          const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-          if (!emailRegex.test(data)) {
-            return "올바른 이메일 형식이 아닙니다";
-          }
+          if (!data.length) return "제목을 입력해주세요";
         },
       }}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <InputField
           autoFocus
-          label="이메일"
-          placeholder="이메일을 입력해주세요."
-          inputMode="email"
-          returnKeyType="next"
+          label="제목"
+          placeholder="제목을 입력해주세요."
           submitBehavior="submit"
-          onSubmitEditing={() => setFocus("password")}
+          returnKeyType="next"
+          onSubmitEditing={() => setFocus("description")}
           value={value}
           onChangeText={onChange}
           error={error?.message}
@@ -35,4 +29,4 @@ const EmailInput = () => {
     />
   );
 };
-export default EmailInput;
+export default TitleInput;
